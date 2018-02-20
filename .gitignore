@@ -1,0 +1,9 @@
+# coding stuff
+__pycache__/
+*.py[cod]
+*.log
+
+# because I don't feel the need to upload heaps of videos and images atm
+samples/
+*.bak
+*.bak/

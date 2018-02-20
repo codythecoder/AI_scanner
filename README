@@ -1,0 +1,18 @@
+Reconstruct videos as 3D models with this one weird trick.
+(Disclaimer: Doesn't work)
+
+Author:
+- Cody Lovett
+
+Dependencies:
+- Python 3.6 upwards
+- tensorflow
+- numpy
+- pygame, imageio, Pillow (for creating data)
+
+Usage:
+- training.py [--training_folder "training_data"]
+  1. Load the dataset you'll be using into training_data/sample_true and training_data/sample_false
+  2. Run training.py until you get the accuracy you want
+- create_sample_data.py
+  TODO
