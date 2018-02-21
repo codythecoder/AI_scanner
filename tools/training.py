@@ -64,8 +64,8 @@ def conv_chain(x, x_features, layer_sizes, layer_features):
     layer_features = (x_features,) + tuple(layer_features)
     last_layer = x
     for i in range(1, len(layer_sizes)):
-        W_conv = conv_weight_variable(f'weight{i}', [layer_sizes[i], layer_sizes[i], layer_features[i-1], layer_features[i]])
-        b_conv = conv_bias_variable(f'bias{i}', [layer_features[i]])
+        W_conv = conv_weight_variable('weight{}'.format(i), [layer_sizes[i], layer_sizes[i], layer_features[i-1], layer_features[i]])
+        b_conv = conv_bias_variable('bias{}'.format(i), [layer_features[i]])
 
         h_conv = tf.nn.relu(conv2d(last_layer, W_conv) + b_conv)
         # h_conv = tf.nn.tanh(conv2d(last_layer, W_conv) + b_conv)
@@ -158,7 +158,7 @@ with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
     i = 0
     while True:
-        print (f'step {i:,}', end='\r')
+        print ('step {:,}'.format(i), end='\r')
         # load up to 10 data points with random distribution of
         #   true/false data in random proportions (averaging at 50/50 True/False)
         batch = rearrange_batch(training_data.load(10))
@@ -168,7 +168,7 @@ with tf.Session() as sess:
             batch = rearrange_batch(training_data.load(100))
             train_accuracy = accuracy.eval(feed_dict={
                     x1: batch[0], x2: batch[1], y_: batch[2], keep_prob: 1.0})
-            print(f'step {i:,}, training accuracy {train_accuracy:,.6f}')
+            print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
             graph.append(train_accuracy)
         # save graph
         if i and i % save_time == 0:

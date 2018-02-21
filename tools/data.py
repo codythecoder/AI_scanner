@@ -6,7 +6,7 @@ from misc import get_all_files_walk
 from setup import *
 
 class Training:
-    def __init__(self, output, cache_limit=50_000):
+    def __init__(self, output, cache_limit=50000):
         self.output = output
         files = os.path.join(output, 'sample_true')
         files0 = os.path.join(output, 'sample_false')
@@ -70,4 +70,4 @@ class Training:
 if __name__ == '__main__':
     # test that loading all the images works
     a = Training('../training_data')
-    a.load(1_000_000)
+    a.load(1000000)
