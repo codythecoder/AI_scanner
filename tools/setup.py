@@ -1,3 +1,5 @@
+VERSION = '0.0.1'
+
 
 color_channels = 3
 # how many pixels large should the comparison images be

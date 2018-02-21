@@ -55,7 +55,7 @@ def conv_chain(x, x_features, layer_sizes, layer_features):
     params:
     x              - Input tensor
     x_features     - Number of features in x (probably number of color channels)
-    layer_sizes    - the catchment area for each CNN layer (e.g. (5, 3, 3))
+    layer_sizes    - the filter size for each CNN layer (e.g. (5, 3, 3))
     layer_features - The number of features to calculate for each layer (e.g. (8, 16, 32))
 
     output:
@@ -70,6 +70,7 @@ def conv_chain(x, x_features, layer_sizes, layer_features):
         h_conv = tf.nn.relu(conv2d(last_layer, W_conv) + b_conv)
         # h_conv = tf.nn.tanh(conv2d(last_layer, W_conv) + b_conv)
         last_layer = max_pool_2x2(h_conv)
+        # last_layer = h_conv
     return last_layer
 
 def rearrange_batch(batch):
