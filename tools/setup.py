@@ -10,3 +10,9 @@ nn_outputs = 1
 
 input_shape = (-1, scan_size, scan_size, color_channels)
 input_size = color_channels*(scan_size**2)
+
+CNN_filter_sizes = (5, 3, 3)
+CNN_features = (9, 16, 25)
+CNN_strides = (2, 2, 2)
+
+FCL_sizes = (3136, 128, nn_outputs)
