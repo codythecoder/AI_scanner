@@ -112,8 +112,8 @@ concat_size = x1_size + x2_size
 W_fc1 = weight_variable([concat_size, 1024])
 b_fc1 = bias_variable([1024])
 
-concat_flat = tf.reshape(concat, [-1, concat_size])
-h_fc1 = tf.nn.relu(tf.matmul(concat_flat, W_fc1) + b_fc1)
+concat = tf.reshape(concat, [-1, concat_size])
+h_fc1 = tf.nn.relu(tf.matmul(concat, W_fc1) + b_fc1)
 
 #dropout
 h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
@@ -168,11 +168,11 @@ with tf.Session() as sess:
             batch = rearrange_batch(training_data.load(100))
             train_accuracy = accuracy.eval(feed_dict={
                     x1: batch[0], x2: batch[1], y_: batch[2], keep_prob: 1.0})
-            print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
+            # print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
             graph.append(train_accuracy)
         # save graph
         if i and i % save_time == 0:
-            print ('saving')
+            print ('step {:,}        saving (average = {:.5f})'.format(i, sum(graph)/len(graph)))
             saver.save(sess, model_path)
             with open(model_path + '.csv', 'a') as f:
                 # Save the accuracies so that we can check them later on
@@ -180,5 +180,5 @@ with tf.Session() as sess:
                 graph = []
 
         # training
-        train_step.run(feed_dict={x1: batch[0], x2: batch[1], y_: batch[2], keep_prob: 0.4})
+        train_step.run(feed_dict={x1: batch[0], x2: batch[1], y_: batch[2], keep_prob: 1})
         i += 1
