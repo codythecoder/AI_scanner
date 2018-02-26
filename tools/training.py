@@ -105,7 +105,7 @@ with tf.variable_scope("image_filters") as scope:
 
 # after extracting features from x1 and x2, we should concatenate the outputs
 #   for use in the FCLs
-concat = tf.concat([x1_conv_chain, x2_conv_chain], 0)
+concat = tf.concat([x1_conv_chain, x2_conv_chain], 3)
 concat_size = x1_size + x2_size
 
 #fully connected layer 1
