@@ -5,7 +5,7 @@ Author:
 - Cody Lovett
 
 Dependencies:
-- Python 3.6 upwards
+- Python 3.5 upwards
 - tensorflow
 - numpy
 - pygame, imageio, Pillow (for creating data)
