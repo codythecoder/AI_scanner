@@ -35,11 +35,11 @@ def conv_bias_variable(name, shape):
     initialiser = tf.constant_initializer(0.1)
     return tf.get_variable(name, shape, initializer=initialiser)
 
-def conv2d(x, W):
+def conv2d(x, W, stride=1):
     """Create a convolutional neural network layer.
     x is the input and W is the initialised weights."""
     # W = filter_height, filter_width, in_channels, out_channels
-    return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='VALID')
+    return tf.nn.conv2d(x, W, strides=[1, stride, stride, 1], padding='VALID')
 
 def max_pool_2x2(x, padding="VALID"):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
@@ -67,10 +67,10 @@ def conv_chain(x, x_features, layer_sizes, layer_features):
         W_conv = conv_weight_variable('weight{}'.format(i), [layer_sizes[i], layer_sizes[i], layer_features[i-1], layer_features[i]])
         b_conv = conv_bias_variable('bias{}'.format(i), [layer_features[i]])
 
-        h_conv = tf.nn.relu(conv2d(last_layer, W_conv) + b_conv)
+        h_conv = tf.nn.relu(conv2d(last_layer, W_conv, stride=2) + b_conv)
         # h_conv = tf.nn.tanh(conv2d(last_layer, W_conv) + b_conv)
-        last_layer = max_pool_2x2(h_conv)
-        # last_layer = h_conv
+        # last_layer = max_pool_2x2(h_conv)
+        last_layer = h_conv
     return last_layer
 
 def rearrange_batch(batch):
