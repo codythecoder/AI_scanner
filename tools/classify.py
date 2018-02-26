@@ -1,6 +1,3 @@
-"""test file
-plz ignore plz"""
-
 import tensorflow as tf
 from data import Training
 import argparse
@@ -43,10 +40,6 @@ training_data = Training(args.training_folder)
 
 saver = tf.train.Saver()
 model_path = os.path.join(args.training_folder, 'model.ckpt')
-
-# # Create the Estimator
-# mnist_classifier = tf.estimator.Estimator(
-#     model_fn=cnn_model_fn, model_dir="/tmp/mnist_convnet_model")
 
 
 best_accuracy = float('inf')
