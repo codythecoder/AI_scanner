@@ -70,7 +70,7 @@ def fcl_chain(x, layer_sizes, dropout_keep_prob):
     last_layer = x
     layer_sizes = (tensor_size(x),) + tuple(layer_sizes)
 
-    for i in range(1, len(layer_sizes)):
+    for i in range(1, len(layer_sizes)-1):
         W_fc1 = weight_variable([layer_sizes[i-1], layer_sizes[i]])
         b_fc1 = bias_variable([layer_sizes[i]])
 
@@ -78,7 +78,12 @@ def fcl_chain(x, layer_sizes, dropout_keep_prob):
 
         last_layer = tf.nn.dropout(h_fc1, dropout_keep_prob)
 
-    return last_layer
+    W_fc1 = weight_variable([layer_sizes[-2], layer_sizes[-1]])
+    b_fc1 = bias_variable([layer_sizes[-1]])
+
+    h_fc1 = tf.matmul(last_layer, W_fc1) + b_fc1
+
+    return h_fc1
 
 
 # image1, image2, output
