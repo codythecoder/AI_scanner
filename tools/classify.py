@@ -6,7 +6,7 @@ from setup import *
 from numpy import product
 import matplotlib.pyplot as plt
 import math
-import network
+import network as net
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--training_folder', default='../training_data', help='The training data folder')
@@ -47,19 +47,17 @@ best_accuracy = float('inf')
 with tf.Session() as sess:
     saver.restore(sess, model_path)
     data = rearrange_batch(training_data.load(1000))
-    feed_dict = {network.x1: data[0], network.x2:data[1], network.keep_prob:1}
-    feed_dict_1 = {network.x1: [data[0][0]], network.x2:[data[1][0]], network.keep_prob:1}
+    feed_dict = {net.x1: data[0], net.x2:data[1], net.keep_prob:1}
+    feed_dict_1 = {net.x1: [data[0][0]], net.x2:[data[1][0]], net.keep_prob:1}
     # for i in range(len(temp1)):
     #     getActivations(temp1[i],feed_dict_1)
     #     getActivations(temp2[i],feed_dict_1)
-    output = network.y_conv.eval(feed_dict)
+    output = net.y_conv.eval(feed_dict)
     output = [x[0] for x in output]
     check = [x[0] for x in data[2]]
     print (output)
-    print ([round(x) for x in output])
+    print ([int(round(x)) for x in output])
     print (check)
-    avg = sum(output)/len(output)
-    print (avg)
-    print ([int((0 if x < avg else 1) == y) for x, y in zip(output, check)])
-    print (sum(int((0 if x < avg else 1) == y) for x, y in zip(output, check))/len(output))
+    print ([int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check)])
+    print (sum(int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check))/len(output))
     # print ([(0 if x < avg else 1) == check for x, y in zip(output, check)])
