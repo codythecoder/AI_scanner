@@ -48,12 +48,12 @@ with tf.Session() as sess:
         #   true/false data in random proportions (averaging at 50/50 True/False)
         batch = rearrange_batch(training_data.load(10))
 
-        # dubugging accuracy printout/
+        # debugging accuracy printout
         if i % print_time == 0:
             batch = rearrange_batch(training_data.load(100))
             train_accuracy = net.accuracy.eval(feed_dict={
                     net.x1: batch[0], net.x2: batch[1], net.y_: batch[2], net.keep_prob: 1.0})
-            # print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
+            print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
             graph.append(train_accuracy)
         # save graph
         if i and i % save_time == 0:

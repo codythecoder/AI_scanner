@@ -56,6 +56,7 @@ with tf.Session() as sess:
     output = [x[0] for x in output]
     check = [x[0] for x in data[2]]
     print (output)
+    print ([round(x) for x in output])
     print (check)
     avg = sum(output)/len(output)
     print (avg)
