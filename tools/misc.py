@@ -17,6 +17,8 @@ def split_path(path):
         parts.append(end)
         path, end = os.path.split(path)
 
+    if path:
+        parts.append(path)
     parts.reverse()
     return parts
 
