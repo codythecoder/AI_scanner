@@ -46,7 +46,7 @@ best_accuracy = float('inf')
 
 with tf.Session() as sess:
     saver.restore(sess, model_path)
-    data = rearrange_batch(training_data.load(1000))
+    data = rearrange_batch(training_data.load(1000000))
     feed_dict = {net.x1: data[0], net.x2:data[1], net.keep_prob:1}
     feed_dict_1 = {net.x1: [data[0][0]], net.x2:[data[1][0]], net.keep_prob:1}
     # for i in range(len(temp1)):
