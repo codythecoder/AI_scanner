@@ -65,6 +65,25 @@ class Training:
         else:
             return self.images[filename][1], self.images[filename][0]
 
+def extract_image(image, position):
+    offset = scan_size//2
+
+    frame_sqr = (
+        position[0]-offset, position[1]-offset,
+        position[0]+offset+1, position[1]+offset+1
+    )
+
+    image_size = image.shape
+
+    if frame_sqr[0] < 0 or frame_sqr[1] < 0:
+        return
+    if frame_sqr[0] > image_size[0] or frame_sqr[1] > image_size[1]:
+        return
+
+    square = image[frame_sqr[0]:frame_sqr[2], frame_sqr[1]:frame_sqr[3]]
+    square = np.array(square)
+
+    return square
 
 
 if __name__ == '__main__':
