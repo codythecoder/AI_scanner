@@ -65,5 +65,5 @@ with tf.Session() as sess:
                 graph = []
 
         # training
-        net.train_step.run(feed_dict={net.x1: batch[0], net.x2: batch[1], net.y_: batch[2], net.keep_prob: 1})
+        net.train_step.run(feed_dict={net.x1: batch[0], net.x2: batch[1], net.y_: batch[2], net.keep_prob: 0.5})
         i += 1
