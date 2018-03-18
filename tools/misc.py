@@ -28,3 +28,9 @@ def get_all_files_walk(folder):
     for root, dirs, filenames in os.walk(folder):
         files.extend(os.path.join(root, f) for f in filenames)
     return files
+
+def rearrange_batch(batch):
+    """Rearrange the batch from [(image1, image2, output), ...] to
+    [(image1, ...), (image2, ...), (output, ...)]
+    """
+    return list(zip(*batch))

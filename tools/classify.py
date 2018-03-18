@@ -7,17 +7,13 @@ from numpy import product
 import matplotlib.pyplot as plt
 import math
 import network as net
+from misc import rearrange_batch
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--training_folder', default='../training_data', help='The training data folder')
 
 args = parser.parse_args()
 
-def rearrange_batch(batch):
-    """Rearrange the batch from [(image1, image2, output), ...] to
-    [(image1, ...), (image2, ...), (output, ...)]
-    """
-    return list(zip(*batch))
 
 def getActivations(layer, feed_dict):
     units = sess.run(layer,feed_dict=feed_dict)

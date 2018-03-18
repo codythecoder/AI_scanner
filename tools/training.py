@@ -5,6 +5,7 @@ import os
 from setup import *
 from numpy import product
 import network as net
+from misc import rearrange_batch
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--training_folder', default='../training_data', help='The training data folder')
@@ -14,13 +15,6 @@ args = parser.parse_args()
 # how many epochs until we print the accuracy, how many till we save a checkpoint
 print_time = 100
 save_time = 2000
-
-
-def rearrange_batch(batch):
-    """Rearrange the batch from [(image1, image2, output), ...] to
-    [(image1, ...), (image2, ...), (output, ...)]
-    """
-    return list(zip(*batch))
 
 
 # training data loader
