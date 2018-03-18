@@ -1,12 +1,10 @@
-import tensorflow as tf
 from data import Training
 import argparse
 import os
 from setup import *
-from numpy import product
 import matplotlib.pyplot as plt
 import math
-import network as net
+from network import Network
 from misc import rearrange_batch
 
 parser = argparse.ArgumentParser()
@@ -32,28 +30,19 @@ def plotNNFilter(units):
 
 
 
+model_path = os.path.join(args.training_folder, 'model.ckpt')
+net = Network(model_path)
+
 training_data = Training(args.training_folder)
 
-saver = tf.train.Saver()
-model_path = os.path.join(args.training_folder, 'model.ckpt')
+data = rearrange_batch(training_data.load(1000000))
 
-
-best_accuracy = float('inf')
-
-with tf.Session() as sess:
-    saver.restore(sess, model_path)
-    data = rearrange_batch(training_data.load(1000000))
-    feed_dict = {net.x1: data[0], net.x2:data[1], net.keep_prob:1}
-    feed_dict_1 = {net.x1: [data[0][0]], net.x2:[data[1][0]], net.keep_prob:1}
-    # for i in range(len(temp1)):
-    #     getActivations(temp1[i],feed_dict_1)
-    #     getActivations(temp2[i],feed_dict_1)
-    output = net.y_conv.eval(feed_dict)
-    output = [x[0] for x in output]
-    check = [x[0] for x in data[2]]
-    print (output)
-    print ([int(round(x)) for x in output])
-    print (check)
-    print ([int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check)])
-    print (sum(int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check))/len(output))
-    # print ([(0 if x < avg else 1) == check for x, y in zip(output, check)])
+output = net.classify(data[0], data[1])
+print (output)
+check = [x[0] for x in data[2]]
+print (output)
+print ([int(round(x)) for x in output])
+print (check)
+print ([int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check)])
+print (sum(int((0 if x < 0.5 else 1) == y) for x, y in zip(output, check))/len(output))
+# print ([(0 if x < avg else 1) == check for x, y in zip(output, check)])

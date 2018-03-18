@@ -1,6 +1,7 @@
 import tensorflow as tf
 from setup import *
 from numpy import product
+from os.path import isfile
 
 __all__ = ['y_conv', 'train_step', 'accuracy',]
 
@@ -86,20 +87,80 @@ def fcl_chain(x, layer_sizes, dropout_keep_prob):
     return h_fc1
 
 
+
+
+
+class Network:
+    def __init__(self, save_name, training_dropout=1):
+        """Create the network structure"""
+
+        self.training_dropout = training_dropout
+
+        self.save_name = save_name
+
+        if isfile(save_name + '.index'):
+            print ('loading', save_name + '.index')
+            self.load()
+        else:
+            print ('making', save_name + '.index')
+            sess.run(tf.global_variables_initializer())
+
+
+
+    def load(self):
+        self.saver = tf.train.Saver()
+        self.saver.restore(sess, self.save_name)
+
+    def save(self):
+        self.saver.save(sess, self.save_name)
+
+    def train(self, x1, x2, y):
+        global sess
+        feed_dict = {
+            _x1: x1,
+            _x2: x2,
+            y_:  y,
+            keep_prob: self.training_dropout
+        }
+        train_step.run(session=sess, feed_dict=feed_dict)
+
+    def accuracy(self, x1, x2, expected_y):
+        global sess
+        feed_dict = {
+            _x1: x1,
+            _x2: x2,
+            y_: expected_y,
+            keep_prob: 1
+        }
+        return accuracy.eval(session=sess, feed_dict=feed_dict)
+
+    def classify(self, x1, x2):
+        feed_dict = {
+            _x1: x1,
+            _x2: x2,
+            keep_prob: 1,
+        }
+        output = y_conv.eval(session=sess, feed_dict=feed_dict)
+        output = [x[0] for x in output]
+        return output
+
+# It seems like the easiest way to deal with session is to have everything in the mainline
+# especially in global_variables_initializer
+
 # image1, image2, output
-x1 = tf.placeholder(tf.float32, shape=[None, input_size])
-x2 = tf.placeholder(tf.float32, shape=[None, input_size])
+_x1 = tf.placeholder(tf.float32, shape=[None, input_size])
+_x2 = tf.placeholder(tf.float32, shape=[None, input_size])
 y_ = tf.placeholder(tf.float32, shape=[None, nn_outputs])
 
 # training droput
 keep_prob = tf.placeholder(tf.float32)
 
-# x1 and x2 take a flattened image, but CNNs take an nd array
+# _x1 and _x2 take a flattened image, but CNNs take an nd array
 # so we're going to have to reshape things a lot
-x1_image = tf.reshape(x1, input_shape)
-x2_image = tf.reshape(x2, input_shape)
+x1_image = tf.reshape(_x1, input_shape)
+x2_image = tf.reshape(_x2, input_shape)
 with tf.variable_scope("image_filters") as scope:
-    # create a filter that operates on BOTH x1 and x2
+    # create a filter that operates on BOTH _x1 and _x2
     #   while this technically shouldn't be nescecarry
     #   (as image order shouldn't affect anything), it simplifies the problem
     #   and theoretically makes life easier
@@ -109,7 +170,7 @@ with tf.variable_scope("image_filters") as scope:
     x2_conv_chain = conv_chain(x2_image, color_channels, CNN_filter_sizes, CNN_features, CNN_strides)
     x2_size = tensor_size(x2_conv_chain)
 
-# after extracting features from x1 and x2, we should concatenate the outputs
+# after extracting features from _x1 and _x2, we should concatenate the outputs
 #   for use in the FCLs
 concat = tf.concat([x1_conv_chain, x2_conv_chain], 3)
 concat_size = x1_size + x2_size
@@ -122,3 +183,6 @@ y_conv = fcl_chain(concat, FCL_sizes, keep_prob)
 loss = tf.reduce_mean(tf.square(y_ - y_conv))
 train_step = tf.train.AdamOptimizer(1e-4).minimize(loss)
 accuracy = tf.reduce_mean(tf.abs(y_ - y_conv))
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
