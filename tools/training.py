@@ -13,7 +13,7 @@ parser.add_argument('--training_folder', default='../training_data', help='The t
 args = parser.parse_args()
 
 # how many epochs until we print the accuracy, how many till we save a checkpoint
-print_time = 100
+print_time = 2000
 save_time = 2000
 
 
@@ -44,9 +44,9 @@ with tf.Session() as sess:
 
         # debugging accuracy printout
         if i % print_time == 0:
-            batch = rearrange_batch(training_data.load(100))
             train_accuracy = net.accuracy.eval(feed_dict={
                     net.x1: batch[0], net.x2: batch[1], net.y_: batch[2], net.keep_prob: 1.0})
+            batch = rearrange_batch(training_data.load(1000000))
             print('step {:,}, training accuracy {:,.6f}'.format(i, train_accuracy))
             graph.append(train_accuracy)
         # save graph
